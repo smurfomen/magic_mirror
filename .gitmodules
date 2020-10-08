@@ -1,0 +1,6 @@
+[submodule "lib/QOption"]
+	path = lib/QOption
+	url = https://github.com/smurfomen/QOption
+[submodule "lib/QSerializer"]
+	path = lib/QSerializer
+	url = https://github.com/smurfomen/QSerializer
