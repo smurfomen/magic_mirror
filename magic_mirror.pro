@@ -16,18 +16,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    barrel_plotter.cpp \
     main.cpp \
     mainwindow.cpp \
-    plotset.cpp \
+    plotter.cpp \
     qcustomplot.cpp
 
 HEADERS += \
+    barrel_plotter.h \
     mainwindow.h \
-    plotset.h \
+    plotter.h \
     qcustomplot.h
 
 FORMS += \
     mainwindow.ui
+
+
+include($$PWD/lib/lib.pri)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

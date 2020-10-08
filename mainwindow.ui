@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1219</width>
+    <width>725</width>
     <height>639</height>
    </rect>
   </property>
@@ -23,9 +23,9 @@
    <widget class="QCustomPlot" name="customPlot" native="true">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>320</x>
       <y>20</y>
-      <width>631</width>
+      <width>381</width>
       <height>331</height>
      </rect>
     </property>
@@ -36,8 +36,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1219</width>
-     <height>22</height>
+     <width>725</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>

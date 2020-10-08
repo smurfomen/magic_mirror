@@ -1,0 +1,81 @@
+{
+  "types" : [
+    {
+      "name" : "Газ",
+      "rgb" : [250, 170, 20]
+    },
+    {
+      "name" : "Вода",
+      "rgb" : [1, 168, 140]
+    },
+    {
+      "name" : "Электричество",
+      "rgb" : [111, 9, 176]
+    }
+  ],
+  "barrels" : [
+    {
+      "label": "Январь",
+      "index" : 1,
+      "sections" : [
+        {"name" : "Газ", "value" : 2.4} ,
+        {"name" : "Электричество", "value" : 1.1},
+        {"name" : "Вода", "value" : 1.5}
+      ]
+    },
+    {
+      "label": "Февраль",
+      "index" : 2,
+      "sections" : [
+        {"name" : "Газ", "value" : 1.7} ,
+        {"name" : "Электричество", "value" : 1.3},
+        {"name" : "Вода", "value" :1.3}
+      ]
+    },
+    {
+      "label": "Март",
+      "index" : 3,
+      "sections" : [
+        {"name" : "Газ", "value" : 1.5} ,
+        {"name" : "Электричество", "value" : 1.4},
+        {"name" : "Вода", "value" :1.4}
+      ]
+    },
+    {
+      "label": "Апрель",
+      "index" : 4,
+      "sections" : [
+        {"name" : "Газ", "value" : 0.9} ,
+        {"name" : "Электричество", "value" : 1.7},
+        {"name" : "Вода", "value" : 1.4}
+      ]
+    },
+    {
+      "label": "Май",
+      "index" : 5,
+      "sections" : [
+        {"name" : "Газ", "value" : 0.8} ,
+        {"name" : "Электричество", "value" : 1.2},
+        {"name" : "Вода", "value" :1.2}
+      ]
+    },
+    {
+      "label": "Июнь",
+      "index" : 6,
+      "sections" : [
+        {"name" : "Газ", "value" : 0.2} ,
+        {"name" : "Электричество", "value" : 0.4},
+        {"name" : "Вода", "value" :0.5}
+      ]
+    },
+    {
+      "label": "Июль",
+      "index" : 7,
+      "sections" : [
+        {"name" : "Газ", "value" : 0.8} ,
+        {"name" : "Электричество", "value" : 1.7},
+        {"name" : "Вода", "value" : 1.9}
+      ]
+    }
+  ]
+}
