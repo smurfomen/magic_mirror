@@ -17,9 +17,8 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
     customPlot->xAxis->setTickLabelColor(lines);
     customPlot->xAxis->setLabelColor(lines);
 
-    // prepare y axis:
     customPlot->yAxis->setRange(0, 12.1);
-    customPlot->yAxis->setPadding(5); // a bit more space to the left border
+    customPlot->yAxis->setPadding(5);
     customPlot->yAxis->setLabel("Расходы\n(2020)");
     customPlot->yAxis->setBasePen(QPen(lines));
     customPlot->yAxis->setTickPen(QPen(lines));
@@ -28,23 +27,26 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
     customPlot->yAxis->setTickLabelColor(lines);
     customPlot->yAxis->setLabelColor(lines);
 
-    QCPBars * bellowed = nullptr;
+    // предыдущий тип данных
+    QCPBars * prevSectionType = nullptr;
+    // создание зон для всех доступных размеченных данных
     for(auto & sectionType : types){
-        QCPBars * area = new QCPBars(customPlot->xAxis,customPlot->yAxis);
-        // gives more crisp, pixel aligned bar borders
-        area->setAntialiased(false);
-        area->setStackingGap(1);
-        // задать имя и цвета
-        area->setName(sectionType.name);                                 // имя
-        area->setBrush(sectionType.color());                           // заливка
-        area->setPen(QPen(sectionType.color().lighter(170)));       // края посветлее
+        QCPBars * currentSectionType = new QCPBars(customPlot->xAxis,customPlot->yAxis);
+        currentSectionType->setAntialiased(false);
+        currentSectionType->setStackingGap(1);
+        currentSectionType->setName(sectionType.name);                                 // имя
+        currentSectionType->setBrush(sectionType.color());                           // заливка
+        currentSectionType->setPen(QPen(sectionType.color().lighter(170)));       // края посветлее
 
+        // индексы и соответствующие им значения у текущего типа данных
         QVector<double> keys, values;
+
+        // в каждой колонке ищем совпадающую секцию и задаем ей значение
         for(auto & barrel : barrels)
         {
             for(auto & section : barrel.sections)
             {
-                if(section.name == area->name())
+                if(section.name == currentSectionType->name())
                 {
                     keys.append(barrel.index);
                     values.append(section.value);
@@ -53,14 +55,16 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
             }
         }
 
-        area->setData(keys,values);
-        if(bellowed)
-            area->moveBelow(bellowed);
+        // задаем данные для текущего типа
+        currentSectionType->setData(keys,values);
 
-        bellowed = area;
+        // перемещаем над предыдущим типом в списке
+        if(prevSectionType)
+            currentSectionType->moveBelow(prevSectionType);
+        prevSectionType = currentSectionType;
     }
 
-    // setup legend:
+    // задаем легенду
     customPlot->legend->setVisible(true);
     customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignHCenter);
     customPlot->legend->setBrush(QColor(255, 255, 255, 100));

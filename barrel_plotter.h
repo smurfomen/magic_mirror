@@ -5,6 +5,8 @@
 #include <plotter.h>
 #include <qcustomplot.h>
 
+///\class BarrelSectionType
+///\brief тип секции
 class BarrelSectionType : public QSerializer {
     Q_GADGET
     QS_SERIALIZER
@@ -17,6 +19,8 @@ public:
     QS_COLLECTION(QVector, quint8, rgb);
 };
 
+///\class BarrelSection
+///\brief секция в колонне
 class BarrelSection : public QSerializer {
     Q_GADGET
     QS_SERIALIZER
@@ -25,16 +29,19 @@ public:
     QS_FIELD(double, value);
 };
 
-
+///\class Barrel
+///\brief колонна
 class Barrel : public QSerializer{
     Q_GADGET
     QS_SERIALIZER
-public:
+public: 
     QS_FIELD(QString, label);
     QS_FIELD(double, index);
     QS_COLLECTION_OBJECTS(QVector, BarrelSection, sections);
 };
 
+///\class BarrelPlotter
+///\brief Модель размеченных данных для составления гистограмм
 class BarrelPlotter : public QSerializer, public Plotter{
     Q_GADGET
     QS_SERIALIZER
@@ -50,8 +57,10 @@ public:
         }
     }
 
+    ///\brief сформировать график на основе размеченных данных \a BarrelPlotter
     virtual void plot(QCustomPlot * customPlot) override;
 
+    ///\brief Возвращает разметку имен колонн на оси, соответственно их индексам
     QSharedPointer<QCPAxisTickerText> textTicker(){
         QSharedPointer<QCPAxisTickerText> ticker(new QCPAxisTickerText);
         for(auto  & barrel : barrels){
