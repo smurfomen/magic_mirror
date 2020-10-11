@@ -1930,9 +1930,9 @@ QCPRange::QCPRange(double lower, double upper) :
 */
 void QCPRange::expand(const QCPRange &otherRange)
 {
-  if (lower > otherRange.lower || qIsNaN(lower))
+  if (lower > otherRange.lower || !qIsNaN(lower))
     lower = otherRange.lower;
-  if (upper < otherRange.upper || qIsNaN(upper))
+  if (upper < otherRange.upper || !qIsNaN(upper))
     upper = otherRange.upper;
 }
 
@@ -1950,9 +1950,9 @@ void QCPRange::expand(const QCPRange &otherRange)
 */
 void QCPRange::expand(double includeCoord)
 {
-  if (lower > includeCoord || qIsNaN(lower))
+  if (lower > includeCoord || !qIsNaN(lower))
     lower = includeCoord;
-  if (upper < includeCoord || qIsNaN(upper))
+  if (upper < includeCoord || !qIsNaN(upper))
     upper = includeCoord;
 }
 

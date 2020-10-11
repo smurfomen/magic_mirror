@@ -17,7 +17,6 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
     customPlot->xAxis->setTickLabelColor(lines);
     customPlot->xAxis->setLabelColor(lines);
 
-    customPlot->yAxis->setRange(0, 12.1);
     customPlot->yAxis->setPadding(5);
     customPlot->yAxis->setLabel("Расходы\n(2020)");
     customPlot->yAxis->setBasePen(QPen(lines));
@@ -30,7 +29,7 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
     // предыдущий тип данных
     QCPBars * prevSectionType = nullptr;
     // создание зон для всех доступных размеченных данных
-    for(auto & sectionType : types){
+    for(auto & sectionType : data_types){
         QCPBars * currentSectionType = new QCPBars(customPlot->xAxis,customPlot->yAxis);
         currentSectionType->setAntialiased(false);
         currentSectionType->setStackingGap(1);
@@ -39,24 +38,23 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
         currentSectionType->setPen(QPen(sectionType.color().lighter(170)));       // края посветлее
 
         // индексы и соответствующие им значения у текущего типа данных
-        QVector<double> keys, values;
-
+        QVector<double> columns, values;
         // в каждой колонке ищем совпадающую секцию и задаем ей значение
-        for(auto & barrel : barrels)
+        for(auto & segment : segments)
         {
-            for(auto & section : barrel.sections)
+            for(auto & data : segment.data)
             {
-                if(section.name == currentSectionType->name())
+                if(data.data_id == sectionType.id)
                 {
-                    keys.append(barrel.index);
-                    values.append(section.value);
+                    columns.append(segment.index);
+                    values.append(data.value);
                     break;
                 }
             }
         }
 
         // задаем данные для текущего типа
-        currentSectionType->setData(keys,values);
+        currentSectionType->setData(columns,values);
 
         // перемещаем над предыдущим типом в списке
         if(prevSectionType)
@@ -64,9 +62,11 @@ void BarrelPlotter::plot(QCustomPlot * customPlot) {
         prevSectionType = currentSectionType;
     }
 
+    customPlot->yAxis->setRange(range());
+
     // задаем легенду
+    customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignRight);
     customPlot->legend->setVisible(true);
-    customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignHCenter);
     customPlot->legend->setBrush(QColor(255, 255, 255, 100));
     customPlot->legend->setBorderPen(Qt::NoPen);
     customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);

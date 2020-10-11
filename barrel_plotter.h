@@ -5,39 +5,52 @@
 #include <plotter.h>
 #include <qcustomplot.h>
 
-///\class BarrelSectionType
-///\brief тип секции
-class BarrelSectionType : public QSerializer {
+///\class DataType
+///\brief тип данных для задания параметров отображения определенных даных
+class DataType : public QSerializer {
     Q_GADGET
     QS_SERIALIZER
 public:
     QColor color(){
+        for(int i = rgb.size(); i < 3; i++)
+            rgb.append(0);
+
         return QColor(rgb.at(0), rgb.at(1), rgb.at(2));
     }
 
+    QS_FIELD(int, id);
     QS_FIELD(QString, name);
     QS_COLLECTION(QVector, quint8, rgb);
 };
 
-///\class BarrelSection
-///\brief секция в колонне
-class BarrelSection : public QSerializer {
+///\class Data
+///\brief Модель данных конкретного типа, не привязанных к конкретному месту.
+class Data : public QSerializer {
     Q_GADGET
     QS_SERIALIZER
-public:
-    QS_FIELD(QString, name);
+    QS_FIELD(int, data_id);
     QS_FIELD(double, value);
 };
 
-///\class Barrel
-///\brief колонна
-class Barrel : public QSerializer{
+///\class Segment
+///\brief Модель для сегмента графика, содержит положение на графике, пометку и данные, которых может быть много
+class Segment : public QSerializer{
     Q_GADGET
     QS_SERIALIZER
-public: 
     QS_FIELD(QString, label);
     QS_FIELD(double, index);
-    QS_COLLECTION_OBJECTS(QVector, BarrelSection, sections);
+    QS_COLLECTION_OBJECTS(QVector, Data, data);
+
+public:
+    QCPRange range(){
+        QCPRange r;
+        for(auto & d : data)
+        {
+            if(!r.contains(d.value))
+               r.expand(d.value);
+        }
+        return r;
+    }
 };
 
 ///\class BarrelPlotter
@@ -55,6 +68,13 @@ public:
             fromJson(f.readAll());
             f.close();
         }
+
+        int i = 0;
+        for(auto & segment : segments){
+            i++;
+            if(segment.index == 0)
+                segment.index = i;
+        }
     }
 
     ///\brief сформировать график на основе размеченных данных \a BarrelPlotter
@@ -63,14 +83,22 @@ public:
     ///\brief Возвращает разметку имен колонн на оси, соответственно их индексам
     QSharedPointer<QCPAxisTickerText> textTicker(){
         QSharedPointer<QCPAxisTickerText> ticker(new QCPAxisTickerText);
-        for(auto  & barrel : barrels){
-            ticker->addTick(barrel.index, barrel.label);
+        for(auto  & segment : segments){
+            ticker->addTick(segment.index, segment.label);
         }
         return ticker;
     }
 
-    QS_COLLECTION_OBJECTS(QVector, Barrel, barrels);
-    QS_COLLECTION_OBJECTS(QVector, BarrelSectionType, types);
+    QCPRange range() {
+        QCPRange r;
+        for(auto & s : segments)
+            r.expand(s.range());
+
+        return r;
+    }
+
+    QS_COLLECTION_OBJECTS(QVector, Segment, segments);
+    QS_COLLECTION_OBJECTS(QVector, DataType, data_types);
 };
 
 #endif // BARREL_PLOTTER_H
