@@ -5,6 +5,7 @@
 #include <plotter.h>
 #include <qcustomplot.h>
 
+namespace  {
 ///\class DataType
 ///\brief тип данных для задания параметров отображения определенных даных
 class DataType : public QSerializer {
@@ -52,6 +53,8 @@ public:
         return r;
     }
 };
+
+}
 
 ///\class BarrelPlotter
 ///\brief Модель размеченных данных для составления гистограмм
